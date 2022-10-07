@@ -11,7 +11,7 @@
 # Intellij
 .idea
 # Default ignored files
-prog-concurrente.iml
+*.iml
 
 # MacOS
 .DS_Store
