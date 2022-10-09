@@ -26,7 +26,7 @@ public class Server {
             return;
         }
 
-        this.server = new ServerSocket(port);
+        this.server = new ServerSocket(port, 10);
         this.listen();
         this.server.close();
     }
@@ -37,6 +37,7 @@ public class Server {
         while (!this.server.isClosed()) {
             try {
                 Socket client = this.server.accept();
+                System.out.println("Client " + nextID + " connected");
                 Future<Boolean> taskResult = this.taskPool.submit(new ClientCallable(client, nextID));
                 this.requestAnswered.add(taskResult);
                 nextID++;

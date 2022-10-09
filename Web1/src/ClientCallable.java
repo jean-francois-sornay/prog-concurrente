@@ -1,8 +1,10 @@
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 public class ClientCallable implements Callable<Boolean> {
     private final Socket client;
@@ -13,52 +15,56 @@ public class ClientCallable implements Callable<Boolean> {
         this.clientID = ID;
     }
 
-    private String readRequest() {
-        return "";
+    private String readRequest() throws IOException {
+        StringBuilder result = new StringBuilder();
+        InputStream is = client.getInputStream();
+        byte[] bytes;
+        boolean allRead = false;
+
+        do {
+            bytes = new byte[1024];
+            int readBytes = is.read(bytes, 0, bytes.length);
+            byte[] copiedArray = Arrays.copyOfRange(bytes, 0, readBytes);
+            result.append(new String(copiedArray, StandardCharsets.UTF_8));
+
+            if (result.toString().endsWith("\r\n\r\n")) {
+                allRead = true;
+            }
+        } while (!allRead);
+
+        System.out.println("[Client " + this.clientID + "] request received");
+        return result.toString();
     }
 
     private void sendRequest(String request) throws IOException {
-        this.client.getOutputStream().write(request.getBytes(StandardCharsets.UTF_8));
-        this.client.getOutputStream().flush();
+        OutputStream os = this.client.getOutputStream();
+        os.write(request.getBytes(StandardCharsets.UTF_8));
+        os.flush();
+        System.out.println("[Client " + this.clientID + "] answered");
     }
 
     @Override
     public Boolean call() throws Exception {
-        System.out.println("Client " + this.clientID + " connected");
+        System.out.println("[Client " + this.clientID + "] processing request");
         String request = this.readRequest();
 
-        // Thread.sleep(2 * 1000);
         // dispatch request to handler depending on url path received
-        String path = "/";
-        switch (path) {
-            case "/end" -> this.sendRequest(this.getUnknownContent(request));
-            case "/" -> this.sendRequest(this.getHomeContent(request));
-            default -> this.sendRequest(this.getUnknownContent(request));
-        }
+        // a get path method to know wich page was asked
+        // followed by a switch case to the different function
+        // but not mandatory for this exercise
+        TimeUnit.SECONDS.sleep(5);
+        this.sendRequest(this.getHomeContent(request));
 
         this.client.close();
         return true;
     }
 
-    private String getUnknownContent(String request) {
-        String content = """
-                HTTP/1.1 200 OK\r
-                Content-Length: 36\r
-                Content-Type: text/html\r
-                \r
-                <h1>Unknown content</h1>""";
-        System.out.println("[Client " + this.clientID + "]Message envoyé :\n" + content);
-        return content;
-    }
-
     private String getHomeContent(String request) {
-        String content = """
+        return """
                 HTTP/1.1 200 OK\r
                 Content-Length: 36\r
                 Content-Type: text/html\r
                 \r
-                <h1>Home</h1>less""";
-        System.out.println("[Client " + this.clientID + "]Message envoyé :\n" + content);
-        return content;
+                <h1>Homepage</h1>""";
     }
 }
