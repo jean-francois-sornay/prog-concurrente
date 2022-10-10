@@ -2,15 +2,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Queue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.*;
 
 public class Server {
     private ServerSocket server;
-    private ExecutorService taskPool = Executors.newFixedThreadPool(2);
-    private Queue<Future<Boolean>> requestAnswered = new LinkedBlockingQueue<>();
+    private final ExecutorService taskPool = Executors.newFixedThreadPool(2);
+    // May serve to know if the client request has been well answered
+    private final Queue<Future<Integer>> requestAnswered = new LinkedBlockingQueue<>();
 
 
     public static boolean isPortAvailable(int port) {
@@ -22,28 +20,35 @@ public class Server {
     public void start() throws IOException {
         int port = 2134;
         if (!Server.isPortAvailable(port)) {
-            System.out.println("Port not available, server not launched");
+            Logs.error("Server Error, port not available, server not launched");
             return;
         }
 
         this.server = new ServerSocket(port, 10);
         this.listen();
-        this.server.close();
+        this.end();
     }
 
 
-    public void listen() {
+    public void listen() throws IOException {
         int nextID = 0;
         while (!this.server.isClosed()) {
-            try {
-                Socket client = this.server.accept();
-                System.out.println("Client " + nextID + " connected");
-                Future<Boolean> taskResult = this.taskPool.submit(new ClientCallable(client, nextID));
-                this.requestAnswered.add(taskResult);
-                nextID++;
-            } catch (IOException e) {
-                System.out.println();
-            }
+            Socket client = this.server.accept();
+            Future<Integer> taskResult = this.taskPool.submit(new ClientCallable(client, nextID));
+            this.requestAnswered.add(taskResult);
+            Logs.info("[Client " + nextID + "] added to task pool");
+            nextID++;
+        }
+    }
+
+
+    public void end() {
+        this.taskPool.shutdown();
+        this.requestAnswered.clear();
+        try {
+            this.server.close();
+        } catch (IOException e) {
+            Logs.error("Server ended incorrectly" + e);
         }
     }
 }
