@@ -8,11 +8,16 @@ import java.util.concurrent.TimeUnit;
 public class ClientCallable implements Callable<Integer> {
     private final Socket client;
     private final int clientID;
+    private final ServerObserver serverObserver;
 
-    ClientCallable(Socket client, int ID) {
+
+    ClientCallable(Socket client, int ID, ServerObserver observer) {
         this.client = client;
         this.clientID = ID;
+        this.serverObserver = observer;
+        Logs.info("[Client " + ID + "] waiting for processing");
     }
+
 
     private String readRequest() throws IOException {
         StringBuilder result = new StringBuilder();
@@ -26,14 +31,16 @@ public class ClientCallable implements Callable<Integer> {
             byte[] copiedArray = Arrays.copyOfRange(bytes, 0, readBytes);
             result.append(new String(copiedArray, StandardCharsets.UTF_8));
 
-            if (result.toString().endsWith("\r\n\r\n")) {
+            if (result.toString().endsWith("\r\n\r\n"))
                 allRead = true;
-            }
         } while (!allRead);
 
         Logs.info("[Client " + this.clientID + "] request well received");
+        int lineNumber = result.toString().split("\r\n").length - 1;
+        this.serverObserver.increment(lineNumber);
         return result.toString();
     }
+
 
     private int sendRequest(String returnCode, String body) {
         String request = "HTTP/1.1 " + returnCode
@@ -50,6 +57,7 @@ public class ClientCallable implements Callable<Integer> {
         Logs.info("[Client " + this.clientID + "] request sended");
         return 0;
     }
+
 
     @Override
     public Integer call() {
@@ -77,6 +85,7 @@ public class ClientCallable implements Callable<Integer> {
         }
         return 0;
     }
+
 
     private String getHomeContent(String request) {
         try {
