@@ -1,9 +1,10 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public interface View {
-    String getContent(Map<String, String> params);
+    String getContent(Map<String, ArrayList<String>> params);
 
     static String getHeader(String returnCode, String body) {
         return "HTTP/1.1 " + returnCode

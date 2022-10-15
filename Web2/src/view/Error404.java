@@ -1,5 +1,6 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Error404 implements View {
@@ -13,7 +14,7 @@ public class Error404 implements View {
 
 
     @Override
-    public String getContent(Map<String, String> params) {
+    public String getContent(Map<String, ArrayList<String>> params) {
         return View.getHeader("404 Not Found", "<h1 style=\"text-align: center;\">404</h1>");
     }
 }

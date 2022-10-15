@@ -1,5 +1,6 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Error500 implements View {
@@ -13,7 +14,7 @@ public class Error500 implements View {
 
 
     @Override
-    public String getContent(Map<String, String> params) {
+    public String getContent(Map<String, ArrayList<String>> params) {
         return View.getHeader("500 Internal Server Error", "<h1 style=\"text-align: center;\">500</h1>");
     }
 }

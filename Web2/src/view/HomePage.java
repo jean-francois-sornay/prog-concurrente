@@ -1,5 +1,6 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class HomePage implements View {
@@ -12,9 +13,13 @@ public class HomePage implements View {
     }
 
 
-    public String getContent(Map<String, String> params) {
+    public String getContent(Map<String, ArrayList<String>> params) {
         if (params.containsKey("name")) {
-            return View.getHeader("200 OK", "<h1>Welcome " + params.get("name") + "</h1>");
+            StringBuilder nameList = new StringBuilder();
+            for(String name : params.get("name")) {
+                nameList.append(name).append(", ");
+            }
+            return View.getHeader("200 OK", "<h1>Welcome " + nameList.substring(0, nameList.length() - 2) + "</h1>");
         }
         return View.getHeader("200 OK", "<h1>Homepage</h1>");
     }

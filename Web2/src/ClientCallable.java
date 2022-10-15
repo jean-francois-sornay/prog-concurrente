@@ -5,6 +5,7 @@ import view.HomePage;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
@@ -95,7 +96,7 @@ public class ClientCallable implements Callable<Integer> {
     private String getContent(String request) {
         String url = request.substring(request.indexOf("/"), request.indexOf(" HTTP"));
         String path = getPath(url);
-        HashMap<String, String> params = getQueries(url);
+        HashMap<String, ArrayList<String>> params = getQueries(url);
 
         String content;
         switch (path) {
@@ -113,8 +114,8 @@ public class ClientCallable implements Callable<Integer> {
         return requestPath.substring(0, separatorIndex);
     }
 
-    private HashMap<String, String> getQueries(String requestPath) {
-        HashMap<String, String> parameters = new HashMap<>();
+    private HashMap<String, ArrayList<String>> getQueries(String requestPath) {
+        HashMap<String, ArrayList<String>> parameters = new HashMap<>();
 
         int separatorIndex = requestPath.indexOf("?");
         if (separatorIndex < 0) {
@@ -124,7 +125,11 @@ public class ClientCallable implements Callable<Integer> {
         String parametersString = requestPath.substring(separatorIndex + 1);
         for (String param : parametersString.split("&")) {
             int indexOfEqual = param.indexOf("=");
-            parameters.put(param.substring(0, indexOfEqual), param.substring(indexOfEqual + 1));
+            String paramName = param.substring(0, indexOfEqual);
+            if(!parameters.containsKey(paramName)) {
+                parameters.put(paramName, new ArrayList<>());
+            }
+            parameters.get(paramName).add(param.substring(indexOfEqual + 1));
         }
 
         return parameters;
