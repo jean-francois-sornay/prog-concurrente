@@ -2,8 +2,8 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
 
 public class ClientCallable implements Callable<Integer> {
     private final Socket client;
@@ -65,7 +65,7 @@ public class ClientCallable implements Callable<Integer> {
 
         String request;
         try {
-             request = this.readRequest();
+            request = this.readRequest();
         } catch (IOException e) {
             Logs.warning("500 Internal Server Error, readRequest failed : " + e.getMessage());
             return sendRequest("500 Internal Server Error", "Request not received correctly");
@@ -95,6 +95,40 @@ public class ClientCallable implements Callable<Integer> {
             this.sendRequest("500 Internal Server Error", "Request could not be computed");
             return null;
         }
+        String requestPath = request.substring(request.indexOf("/"), request.indexOf(" HTTP"));
+        HashMap<String, String> params = parseRequestParameter(requestPath);
+        String requestedPath = parseRequestPath(requestPath);
+
+        //Todo change content to include the asked file if it exists
+
+        if(params.containsKey("name")) {
+            return "<h1>Welcome " + params.get("name") + "</h1>";
+        }
         return "<h1>Homepage</h1>";
+    }
+
+    private String parseRequestPath(String requestPath) {
+        int separatorIndex = requestPath.indexOf("?");
+        if(separatorIndex < 0) {
+            return requestPath.substring(0, requestPath.indexOf(" "));
+        }
+        return requestPath.substring(0, separatorIndex);
+    }
+
+    private HashMap<String, String> parseRequestParameter(String requestPath) {
+        HashMap<String, String> parameters = new HashMap<>();
+
+        int separatorIndex = requestPath.indexOf("?");
+        if(separatorIndex < 0) {
+            return parameters;
+        }
+
+        String parametersString = requestPath.substring(separatorIndex + 1);
+        for(String param : parametersString.split("&")) {
+            int indexOfEqual = param.indexOf("=");
+            parameters.put(param.substring(0, indexOfEqual), param.substring(indexOfEqual + 1));
+        }
+
+        return parameters;
     }
 }
