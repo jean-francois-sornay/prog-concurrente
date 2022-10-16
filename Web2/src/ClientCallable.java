@@ -1,6 +1,7 @@
 import view.Error404;
 import view.Error500;
 import view.HomePage;
+import view.View;
 
 import java.io.*;
 import java.net.Socket;
@@ -97,14 +98,39 @@ public class ClientCallable implements Callable<Integer> {
         String url = request.substring(request.indexOf("/"), request.indexOf(" HTTP"));
         String path = getPath(url);
         HashMap<String, ArrayList<String>> params = getQueries(url);
-
-        String content;
-        switch (path) {
-            case "/" -> content = HomePage.getInstance().getContent(params);
-            case "/myHomeDir" -> content = HomePage.getInstance().getContent(params);
-            default -> content = Error404.getInstance().getContent(params);
+        
+        File f = new File("."+path);
+    
+        if(f.exists() && f.canRead()){
+            if (f.isDirectory()){
+                StringBuilder fileList = new StringBuilder();
+                for(String s : f.list()) {
+                    fileList.append(s);
+                }
+                return View.getHeader("200 OK", fileList.toString()); 
+            }
+            else {
+                try {
+                    FileReader fr = new FileReader(f);   			
+                    BufferedReader br = new BufferedReader(fr);  
+                    StringBuffer sb = new StringBuffer();    
+                    String line;
+                    while((line = br.readLine()) != null)
+                    {
+                        sb.append(line);      
+                        sb.append("\n");     
+                    }
+                    fr.close();    
+                    return View.getHeader("200 OK", sb.toString());  
+                }
+                catch(IOException e){
+                    return Error500.getInstance().getContent(null);
+                }
+            }
         }
-        return content;
+        else {
+            return Error404.getInstance().getContent(params);
+        }
     }
 
     private String getPath(String requestPath) {
