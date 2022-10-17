@@ -1,7 +1,4 @@
-import view.Error404;
-import view.Error500;
-import view.HomePage;
-import view.View;
+import view.*;
 
 import java.io.*;
 import java.net.Socket;
@@ -9,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
 public class ClientCallable implements Callable<Integer> {
@@ -98,39 +96,14 @@ public class ClientCallable implements Callable<Integer> {
         String url = request.substring(request.indexOf("/"), request.indexOf(" HTTP"));
         String path = getPath(url);
         HashMap<String, ArrayList<String>> params = getQueries(url);
-        
-        File f = new File("."+path);
-    
-        if(f.exists() && f.canRead()){
-            if (f.isDirectory()){
-                StringBuilder fileList = new StringBuilder();
-                for(String s : f.list()) {
-                    fileList.append(s);
-                }
-                return View.getHeader("200 OK", fileList.toString()); 
-            }
-            else {
-                try {
-                    FileReader fr = new FileReader(f);   			
-                    BufferedReader br = new BufferedReader(fr);  
-                    StringBuffer sb = new StringBuffer();    
-                    String line;
-                    while((line = br.readLine()) != null)
-                    {
-                        sb.append(line);      
-                        sb.append("\n");     
-                    }
-                    fr.close();    
-                    return View.getHeader("200 OK", sb.toString());  
-                }
-                catch(IOException e){
-                    return Error500.getInstance().getContent(null);
-                }
-            }
+
+        String content;
+        switch (path) {
+            case "/" -> content = HomePage.getInstance().getContent(params);
+            case "/myHomeDir" -> content = GetFilePage.getInstance().getContent(params);
+            default -> content = Error404.getInstance().getContent(params);
         }
-        else {
-            return Error404.getInstance().getContent(params);
-        }
+        return content;
     }
 
     private String getPath(String requestPath) {
