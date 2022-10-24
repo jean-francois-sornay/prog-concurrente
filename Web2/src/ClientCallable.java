@@ -1,6 +1,4 @@
-import view.Error404;
-import view.Error500;
-import view.HomePage;
+import view.*;
 
 import java.io.*;
 import java.net.Socket;
@@ -8,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
 public class ClientCallable implements Callable<Integer> {
@@ -101,7 +100,7 @@ public class ClientCallable implements Callable<Integer> {
         String content;
         switch (path) {
             case "/" -> content = HomePage.getInstance().getContent(params);
-            case "/myHomeDir" -> content = HomePage.getInstance().getContent(params);
+            case "/myHomeDir" -> content = GetFilePage.getInstance().getContent(params);
             default -> content = Error404.getInstance().getContent(params);
         }
         return content;
