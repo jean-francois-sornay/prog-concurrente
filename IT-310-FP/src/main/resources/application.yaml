@@ -1,0 +1,8 @@
+spring:
+  kafka:
+    bootstrap-servers: breisen.datamix.ovh:9093
+
+server:
+  error:
+    whitelabel:
+      enabled: false
