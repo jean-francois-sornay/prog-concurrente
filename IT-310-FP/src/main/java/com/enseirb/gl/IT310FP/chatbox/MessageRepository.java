@@ -4,15 +4,16 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 @Component
 public class MessageRepository {
-    private final List<String> messages = new ArrayList<>();
+    private final Vector<Message> messages = new Vector<>();
 
     public MessageRepository() {
     }
 
-    public List<String> getTenLast() {
+    public List<Message> getTenLast() {
         int storageSize = messages.size();
         if(storageSize < 10) {
            return new ArrayList<>(messages);
@@ -20,7 +21,7 @@ public class MessageRepository {
         return messages.subList(storageSize - 10, storageSize);
     }
 
-    public void storeMessage(String msg) {
+    public void storeMessage(Message msg) {
         messages.add(msg);
     }
 }

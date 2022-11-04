@@ -1,6 +1,5 @@
 package com.enseirb.gl.IT310FP.chatbox;
 
-import com.enseirb.gl.IT310FP.Truck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import java.util.List;
 @RequestMapping("/messages")
 public class ChatterboxController {
 
-    public static final String TOPIC = "msg.txt";
+    public static final String TOPIC = "msg.json.tlj";
 
     private final Logger log = LoggerFactory.getLogger(String.class);
 
@@ -23,24 +22,24 @@ public class ChatterboxController {
     MessageRepository messageRepository;
 
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, Message> kafkaTemplate;
 
     public ChatterboxController() {
     }
 
     @PostMapping
-    public void post (@RequestBody String msg) {
+    public void post (@RequestBody Message msg) {
         System.out.println(msg);
-        kafkaTemplate.send(TOPIC, msg + " " + Instant.now());
+        kafkaTemplate.send(TOPIC, msg);
     }
 
     @GetMapping("")
-    public List<String> getLastMessages() {
+    public List<Message> getLastMessages() {
         return messageRepository.getTenLast();
     }
 
     @KafkaListener(id= "msg-tlj", topics = TOPIC)
-    public void received(String message) {
+    public void received(Message message) {
         log.info("message received {}", message);
         messageRepository.storeMessage(message);
     }

@@ -18,10 +18,12 @@ public class CitiesLogger {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
+    /*
     @EventListener(ContextRefreshedEvent.class)
     public void onApplicationStarted() {
         log.info("Application starting");
         kafkaTemplate.send(TOPIC, "Désolé, à 13h30 on est en réunion :'( " + Instant.now());
     }
+     */
 }
 

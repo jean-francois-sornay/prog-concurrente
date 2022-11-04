@@ -9,13 +9,15 @@ import java.time.Instant;
 
 @Component
 public class CitiesReceiver {
-    /*
+
     private final Logger log = LoggerFactory.getLogger(CitiesReceiver.class);
 
+    /*
     @KafkaListener(id= "jf-city", topics = "cities")
     public void received(String city) {
         log.info("City received {}", city);
     }
-
      */
+
+
 }
