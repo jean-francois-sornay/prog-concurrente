@@ -2,8 +2,8 @@ package com.enseirb.gl.vroumvroom.truckConsumer;
 
 public class TruckPositionMessage {
     private Position position;
-    private int truckid;
-    private double ts;
+    private int truckId = -1;
+    private double ts = 0;
 
     public Position getPosition() {
         return position;
@@ -13,12 +13,12 @@ public class TruckPositionMessage {
         this.position = position;
     }
 
-    public int getTruckid() {
-        return truckid;
+    public int getTruckId() {
+        return truckId;
     }
 
-    public void setTruckid(int truckid) {
-        this.truckid = truckid;
+    public void setTruckId(int truckId) {
+        this.truckId = truckId;
     }
 
     public double getTs() {
@@ -27,5 +27,14 @@ public class TruckPositionMessage {
 
     public void setTs(double ts) {
         this.ts = ts;
+    }
+
+    @Override
+    public String toString() {
+        return "TruckPositionMessage{" +
+                "position=" + position +
+                ", truckid=" + truckId +
+                ", ts=" + ts +
+                '}';
     }
 }

@@ -19,7 +19,7 @@ public class TruckConsumer {
 
     public TruckConsumer() {}
 
-    @KafkaListener(id = "truckid", topics = "trucks.position")
+    @KafkaListener(id = "trucks.position", topics = "trucks.position")
     public void received(TruckPositionMessage tpMessage) {
         log.info("message received {}", tpMessage);
         //positionRepository.storePosition(tpMessage);
