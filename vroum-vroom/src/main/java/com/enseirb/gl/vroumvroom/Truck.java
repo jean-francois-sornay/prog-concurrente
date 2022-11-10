@@ -1,27 +1,40 @@
 package com.enseirb.gl.vroumvroom;
 
-import java.util.Date;
-
 public class Truck {
-    private String licensePlate;
-    private Date firstCirculationDate;
-    private int emptyWeight;
+    private Position position;
+    private int truckId = -1;
+    private double ts = 0;
 
-    public Truck(String licensePlate, Date firstCirculationDate, int emptyWeight) {
-        this.licensePlate = licensePlate;
-        this.firstCirculationDate = firstCirculationDate;
-        this.emptyWeight = emptyWeight;
+    public Position getPosition() {
+        return position;
     }
 
-    public String getLicensePlate() {
-        return licensePlate;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
-    public Date getFirstCirculationDate() {
-        return firstCirculationDate;
+    public int getTruckId() {
+        return truckId;
     }
 
-    public float getEmptyWeight() {
-        return emptyWeight;
+    public void setTruckId(int truckId) {
+        this.truckId = truckId;
+    }
+
+    public double getTs() {
+        return ts;
+    }
+
+    public void setTs(double ts) {
+        this.ts = ts;
+    }
+
+    @Override
+    public String toString() {
+        return "TruckPositionMessage{" +
+                "position=" + position +
+                ", truckid=" + truckId +
+                ", ts=" + ts +
+                '}';
     }
 }

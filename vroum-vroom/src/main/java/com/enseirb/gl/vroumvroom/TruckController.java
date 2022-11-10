@@ -14,11 +14,11 @@ public class TruckController {
 
     @GetMapping("")
     public String getTruck() {
-        return new Truck("BB-421-GJ", new Date(), 9999).toString();
+        return new Truck().toString();
     }
 
-    @GetMapping("/{id}")
+    /*@GetMapping("/{id}")
     public Truck getTruckById(@PathVariable int id) {
         return truckRepo.getById(id);
-    }
+    }*/
 }

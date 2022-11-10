@@ -1,4 +1,4 @@
-package com.enseirb.gl.vroumvroom.truckConsumer;
+package com.enseirb.gl.vroumvroom;
 
 public class Position {
     private double latitude;
