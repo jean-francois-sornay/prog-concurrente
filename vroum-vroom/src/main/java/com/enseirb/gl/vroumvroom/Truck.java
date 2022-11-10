@@ -24,13 +24,4 @@ public class Truck {
     public float getEmptyWeight() {
         return emptyWeight;
     }
-
-    @Override
-    public String toString() {
-        return "Truck { " + "<br>"
-                + "License plate : " + licensePlate + "<br>"
-                + "First circulation : " + firstCirculationDate + "<br>"
-                + "Empty weight : " + emptyWeight + "Kg" + "<br>"
-                + "}";
-    }
 }
