@@ -17,8 +17,8 @@ public class TruckController {
         return new Truck().toString();
     }
 
-    /*@GetMapping("/{id}")
+    @GetMapping("/{id}")
     public Truck getTruckById(@PathVariable int id) {
-        return truckRepo.getById(id);
-    }*/
+        return truckRepo.getLastPosition(id);
+    }
 }

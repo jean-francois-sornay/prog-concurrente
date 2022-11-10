@@ -6,11 +6,24 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class TruckRepository {
-    private final ConcurrentHashMap<Integer, Position> positions = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Integer, Truck> positions = new ConcurrentHashMap<>();
 
-    public TruckRepository() {}
+    public TruckRepository() {
+    }
 
     public void storeTruckPosition(Truck truck) {
-        positions.put(truck.getTruckId(), truck.getPosition());
+        if (positions.containsKey(truck.getTruckId())) {
+            if (positions.get(truck.getTruckId()).getTs() > truck.getTs()) {
+                return;
+            }
+        }
+        positions.put(truck.getTruckId(), truck);
+    }
+
+    public Truck getLastPosition(int id) {
+        if (!positions.containsKey(id)) {
+            throw new TruckNotFoundException("truck with id " + id + " not found");
+        }
+        return positions.get(id);
     }
 }

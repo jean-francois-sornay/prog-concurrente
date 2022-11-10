@@ -9,6 +9,7 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
       value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      auto-offset-reset: earliest
       properties:
         spring.json.use.type.headers: false
         spring.json.value.default.type: com.enseirb.gl.vroumvroom.Truck

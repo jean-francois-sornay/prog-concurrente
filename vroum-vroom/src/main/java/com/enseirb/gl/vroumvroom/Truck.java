@@ -3,7 +3,7 @@ package com.enseirb.gl.vroumvroom;
 public class Truck {
     private Position position;
     private int truckId = -1;
-    private double ts = 0;
+    private long ts = 0;
 
     public Position getPosition() {
         return position;
@@ -21,11 +21,11 @@ public class Truck {
         this.truckId = truckId;
     }
 
-    public double getTs() {
+    public long getTs() {
         return ts;
     }
 
-    public void setTs(double ts) {
+    public void setTs(long ts) {
         this.ts = ts;
     }
 
