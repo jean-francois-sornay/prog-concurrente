@@ -32,7 +32,7 @@ public class TruckConsumer implements ConsumerSeekAware {
 
     @KafkaListener(id = "trucks.position", topics = TOPIC)
     public void received(Truck tpMessage) {
-        log.info("message received {}", tpMessage);
+        //log.info("message received {}", tpMessage);
         truckRepository.storeTruckPosition(tpMessage);
     }
 }

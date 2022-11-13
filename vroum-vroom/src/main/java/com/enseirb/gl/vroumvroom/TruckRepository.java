@@ -11,7 +11,7 @@ public class TruckRepository {
     public TruckRepository() {
     }
 
-    public void storeTruckPosition(Truck truck) {
+    public synchronized void storeTruckPosition(Truck truck) {
         if (positions.containsKey(truck.getTruckId())) {
             if (positions.get(truck.getTruckId()).getTs() > truck.getTs()) {
                 return;
