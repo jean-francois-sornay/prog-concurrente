@@ -1,4 +1,4 @@
-package com.enseirb.gl.vroumvroom;
+package com.enseirb.gl.vroumvroom.models;
 
 public class Position {
     private double latitude;
@@ -12,6 +12,7 @@ public class Position {
         this.latitude = latitude;
     }
 
+
     public double getLongitude() {
         return longitude;
     }
@@ -19,6 +20,7 @@ public class Position {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
+
 
     @Override
     public String toString() {

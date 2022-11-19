@@ -1,9 +1,10 @@
-package com.enseirb.gl.vroumvroom;
+package com.enseirb.gl.vroumvroom.models;
 
 public class Truck {
     private Position position;
     private int truckId = -1;
     private long ts = 0;
+
 
     public Position getPosition() {
         return position;
@@ -13,6 +14,7 @@ public class Truck {
         this.position = position;
     }
 
+
     public int getTruckId() {
         return truckId;
     }
@@ -21,6 +23,7 @@ public class Truck {
         this.truckId = truckId;
     }
 
+
     public long getTs() {
         return ts;
     }
@@ -28,6 +31,7 @@ public class Truck {
     public void setTs(long ts) {
         this.ts = ts;
     }
+
 
     @Override
     public String toString() {

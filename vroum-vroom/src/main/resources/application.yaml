@@ -12,7 +12,7 @@ spring:
       auto-offset-reset: earliest
       properties:
         spring.json.use.type.headers: false
-        spring.json.value.default.type: com.enseirb.gl.vroumvroom.Truck
+        spring.json.value.default.type: com.enseirb.gl.vroumvroom.models.Truck
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
 
 server:

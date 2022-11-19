@@ -1,4 +1,4 @@
-package com.enseirb.gl.vroumvroom;
+package com.enseirb.gl.vroumvroom.errors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
