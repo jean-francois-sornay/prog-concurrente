@@ -40,7 +40,7 @@ public class TruckRepository {
      * Get the last known position of a truck
      * @param id the id of the truck
      */
-    public Position getTruckLastPosition(int id) {
+    public synchronized Position getTruckLastPosition(int id) {
         if (!positions.containsKey(id)) {
             throw new TruckNotFoundException("truck with id " + id + " not found");
         }

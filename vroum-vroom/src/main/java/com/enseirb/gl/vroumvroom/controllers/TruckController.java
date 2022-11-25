@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -43,6 +44,9 @@ public class TruckController {
      */
     @RequestMapping("/{id}/map")
     public ResponseEntity<Object> redirectToMap(@PathVariable int id) throws URISyntaxException {
-        return truckService.getRedirectionToMap(id);
+        URI mapServiceLink = new URI(truckService.getBreisenMap(id));
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(mapServiceLink);
+        return new ResponseEntity<>(httpHeaders, HttpStatus.MOVED_PERMANENTLY);
     }
 }

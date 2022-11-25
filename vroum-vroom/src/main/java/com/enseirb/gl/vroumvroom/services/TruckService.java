@@ -19,6 +19,9 @@ public class TruckService {
     @Autowired
     private TruckRepository truckRepo;
 
+    @Autowired
+    private BreisenWebService breisenWebService;
+
 
     /**
      * Get the list of all trucks known
@@ -38,14 +41,10 @@ public class TruckService {
 
 
     /**
-     * Redirect to a map web service depending on the last known position of a truck
+     * return the link to the map where the truck with the given id is
      * @param id the id of the truck
      */
-    public ResponseEntity<Object> getRedirectionToMap(int id) throws URISyntaxException {
-        Position lastPosition = truckRepo.getTruckLastPosition(id);
-        URI mapServiceLink = new URI(BreisenWebService.sendRequestToBreisenWebService("/map", lastPosition, String.class));
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(mapServiceLink);
-        return new ResponseEntity<>(httpHeaders, HttpStatus.MOVED_PERMANENTLY);
+    public String getBreisenMap(int id) {
+        return breisenWebService.sendRequestToBreisenWebService("/map", getLastPosition(id), String.class);
     }
 }
